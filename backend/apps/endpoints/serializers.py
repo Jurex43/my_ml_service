@@ -14,7 +14,7 @@ class MLAlgorithmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MLAlgorithm
-        fields = '__all__'
+        fields = ('id', 'name', 'description', 'code', 'version', 'owner', 'created_at', 'parent_endpoint', 'current_status')
         read_only_fields = ('id', 'created_at')
 
     def get_current_status(self, instance):
@@ -24,7 +24,7 @@ class MLAlgorithmSerializer(serializers.ModelSerializer):
                 parent_mlalgorithm=instance,
                 active=True
             ).latest('created_at')
-            return MLAlgorithmStatusSerializer(status).data
+            return status.status
         except MLAlgorithmStatus.DoesNotExist:
             return None
 
